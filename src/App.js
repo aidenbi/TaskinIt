@@ -25,7 +25,7 @@ const App = (counter) => {
 
   // Fetch Tasks
   const fetchTasks = async () => {
-    const res = await fetch('https://taskinit.herokuapp.com/tasks')
+    const res = await fetch('https://taskinit-backend.herokuapp.com/tasks')
     const data = await res.json()
 
     return data
@@ -33,7 +33,7 @@ const App = (counter) => {
 
   // Fetch Task
   const fetchTask = async (id) => {
-    const res = await fetch(`https://taskinit.herokuapp.com/tasks/${id}`)
+    const res = await fetch(`https://taskinit-backend.herokuapp.com/tasks/${id}`)
     const data = await res.json()
 
     return data
@@ -45,7 +45,7 @@ const App = (counter) => {
   const addTask = async (task) => {
     task.Difficulty = 1;
     task.Completion = false;
-    const res = await fetch('https://taskinit.herokuapp.com/tasks', {
+    const res = await fetch('https://taskinit-backend.herokuapp.com/tasks', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -67,7 +67,7 @@ const App = (counter) => {
 
   // Delete Task
   const deleteTask = async (id) => {
-    await fetch(`https://taskinit.herokuapp.com/tasks/${id}`, {
+    await fetch(`https://taskinit-backend.herokuapp.com/tasks/${id}`, {
       method: 'DELETE'
     })
 
@@ -83,7 +83,7 @@ const App = (counter) => {
       reminder: !taskToToggle.reminder
     }
 
-    const res = await fetch(`https://taskinit.herokuapp.com/tasks/${id}`, {
+    const res = await fetch(`https://taskinit-backend.herokuapp.com/tasks/${id}`, {
       method: 'PUT',
       headers: {
         'Content-type': 'application/json'
@@ -112,7 +112,7 @@ const App = (counter) => {
       Difficulty: taskAdjusted.Difficulty !== 9 ? (taskAdjusted.Difficulty + 1) : 9
     }
 
-    const res = await fetch(`https://taskinit.herokuapp.com/tasks/${id}`, {
+    const res = await fetch(`https://taskinit-backend.herokuapp.com/tasks/${id}`, {
       method: 'PUT',
       headers: {
         'Content-type': 'application/json'
@@ -141,7 +141,7 @@ const App = (counter) => {
       Difficulty: taskAdjusted.Difficulty !== 1 ? (taskAdjusted.Difficulty - 1) : 1
     }
 
-    const res = await fetch(`https://taskinit.herokuapp.com/tasks/${id}`, {
+    const res = await fetch(`https://taskinit-backend.herokuapp.com/tasks/${id}`, {
       method: 'PUT',
       headers: {
         'Content-type': 'application/json'
@@ -170,7 +170,7 @@ const App = (counter) => {
       Completion: true
     }
 
-    const res = await fetch(`https://taskinit.herokuapp.com/tasks/${id}`, {
+    const res = await fetch(`https://taskinit-backend.herokuapp.com/tasks/${id}`, {
       method: 'PUT',
       headers: {
         'Content-type': 'application/json'
