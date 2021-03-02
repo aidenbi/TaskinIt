@@ -5,14 +5,15 @@ import Tasks from './components/Tasks'
 import AddTask from './components/AddTask'
 import Footer from './components/Footer'
 import About from './components/About'
+import Login from './components/Login'
 
 
 
 const App = (counter) => {
   const [showAddTask, setShowAddTask] = useState(false)
   const [tasks, setTasks] = useState([
-
   ])
+  const [username, setUsername] = useState("")
 
   useEffect(() => {
     const getTasks = async () => {
@@ -194,20 +195,31 @@ const App = (counter) => {
   }
 
 
+  //User name's input
+  const userInput = (username) => {
+    setUsername(username)
+    console.log("hi", username)
+  }
+
   return (
 
     <Router>
-      <div className="container">
-        <Header onAdd={() => setShowAddTask(!showAddTask)} showAdd={showAddTask} />
-        <Route path='/' exact render={(props) => (
-          <>
-            {showAddTask && <AddTask onAdd={addTask} />}
-            {tasks.length > 0 ? <Tasks tasks={tasks.filter((task) => task.Completion === false)} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} /> : ('No Tasks To Show')}
-          </>
-        )} />
-        <Route path='/about' component={About} />
-        <Footer />
-      </div>
+      {username !== "" ? (
+        <div className="container">
+          <Header onAdd={() => setShowAddTask(!showAddTask)} showAdd={showAddTask} />
+          <Route path='/' exact render={(props) => (
+            <>
+              {showAddTask && <AddTask onAdd={addTask} />}
+              {tasks.length > 0 ? <Tasks tasks={tasks.filter((task) => task.Completion === false)} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} /> : ('No Tasks To Show')}
+            </>
+          )} />
+          <Route path='/about' component={About} />
+          <Footer />
+        </div>
+      ) : (
+          <Login onUser={userInput} ></Login>
+        )
+      }
     </Router>
   );
 }
