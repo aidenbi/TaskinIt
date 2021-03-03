@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import Header from './components/Header'
-import Tasks from './components/Tasks'
-import AddTask from './components/AddTask'
 import Footer from './components/Footer'
 import About from './components/About'
 import Login from './components/Login'
 import Following from './components/Following'
 import AddFollowing from './components/AddFollowing'
+import TasksList from './components/TasksList'
 
 
 const App = () => {
@@ -17,11 +16,14 @@ const App = () => {
   const [following, setFollowing] = useState([
   ])
   const [username, setUsername] = useState("")
+  const [tasksList, setTasksList] = useState([
+  ])
 
   useEffect(() => {
     const getTasks = async () => {
       const tasksFromServer = await fetchTasks()
       setTasks(tasksFromServer)
+      setTasksList([tasksFromServer])
     }
 
     getTasks()
@@ -34,6 +36,14 @@ const App = () => {
     getFollowing()
 
   }, [username])
+
+
+  useEffect(() => {
+
+    setTasksList([tasks, ...tasksList.splice(1)])
+
+  }, [tasks])
+
 
   // Fetch Tasks
   const fetchTasks = async () => {
@@ -58,6 +68,16 @@ const App = () => {
 
     return data
   }
+
+
+  // Fetch Tasks for specific user
+  const fetchSpecificTasks = async (tarUsername) => {
+    const res = await fetch(`https://taskinit-backend.herokuapp.com/tasks?Username=${tarUsername}`)
+    const data = await res.json()
+
+    setTasksList([...tasksList, data])
+  }
+
 
   // Add Task
   const addTask = async (task) => {
@@ -241,13 +261,11 @@ const App = () => {
           <Route path='/' exact render={(props) => (
             <>
               <div className="body">
-                {tasks.length > 0 ? <Tasks tasks={tasks.filter((task) => task.Completion === false)} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} onAdd={addTask} /> : ('No Tasks To Show')}
-                {tasks.length > 0 ? <Tasks tasks={tasks.filter((task) => task.Completion === false)} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} onAdd={addTask} /> : ('No Tasks To Show')}
-                {tasks.length > 0 ? <Tasks tasks={tasks.filter((task) => task.Completion === false)} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} onAdd={addTask} /> : ('No Tasks To Show')}
+                <TasksList tasksList={tasksList} username={username} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} onAdd={addTask}></TasksList>
               </div>
               <div className="sidebar">
                 <AddFollowing onFollow={addFollowing} ></AddFollowing>
-                <Following following={following}></Following>
+                <Following following={following} tarUsername={fetchSpecificTasks} ></Following>
               </div>
             </>
           )} />

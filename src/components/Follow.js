@@ -1,10 +1,10 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
 
-const Follow = ({ follow }) => {
+const Follow = ({ follow, tarUsername }) => {
     return (
         <div>
-            <Button color="primary">
+            <Button color="primary" onClick={() => tarUsername(follow.following)}>
                 {follow.following}
             </Button>
         </div>
