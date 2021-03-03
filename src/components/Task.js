@@ -9,7 +9,7 @@ import React from 'react';
 
 const Task = ({ task, onDelete, onToggle, onUp, onDown, onComplete }) => {
     return (
-        <div className={`grid-container ${task.reminder ?
+        <div className={`grid-container1 ${task.reminder ?
             'reminder' : ''}`}
             onDoubleClick={() => onToggle(task.id)}>
             <div className="taskDifficulty">{task.Difficulty}</div>

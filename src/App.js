@@ -6,12 +6,15 @@ import AddTask from './components/AddTask'
 import Footer from './components/Footer'
 import About from './components/About'
 import Login from './components/Login'
+import Following from './components/Following'
+import AddFollowing from './components/AddFollowing'
 
 
+const App = () => {
 
-const App = (counter) => {
-  const [showAddTask, setShowAddTask] = useState(false)
   const [tasks, setTasks] = useState([
+  ])
+  const [following, setFollowing] = useState([
   ])
   const [username, setUsername] = useState("")
 
@@ -22,11 +25,18 @@ const App = (counter) => {
     }
 
     getTasks()
+
+    const getFollowing = async () => {
+      const followingFromServer = await fetchFollowing()
+      setFollowing(followingFromServer)
+    }
+
+    getFollowing()
+
   }, [username])
 
   // Fetch Tasks
   const fetchTasks = async () => {
-    console.log(username)
     const res = await fetch(`https://taskinit-backend.herokuapp.com/tasks?Username=${username}`)
     const data = await res.json()
 
@@ -41,7 +51,13 @@ const App = (counter) => {
     return data
   }
 
+  // Fetch Following Specific to User
+  const fetchFollowing = async () => {
+    const res = await fetch(`https://taskinit-backend.herokuapp.com/following?Username=${username}`)
+    const data = await res.json()
 
+    return data
+  }
 
   // Add Task
   const addTask = async (task) => {
@@ -59,13 +75,25 @@ const App = (counter) => {
     const data = await res.json()
 
     setTasks([...tasks, data])
-
-    // const id = Math.floor(Math.random() * 10000) + 1
-
-    // const newTask = { id, ...task }
-    // setTasks([...tasks, newTask])
-
   }
+
+  //Add Following
+
+  const addFollowing = async (follow) => {
+    follow.Username = username;
+    const res = await fetch('https://taskinit-backend.herokuapp.com/following', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(follow)
+    })
+
+    const data = await res.json()
+
+    setFollowing([...following, data])
+  }
+
 
 
   // Delete Task
@@ -206,16 +234,27 @@ const App = (counter) => {
 
     <Router>
       {username !== "" ? (
-        <div className="container">
-          <Header onAdd={() => setShowAddTask(!showAddTask)} showAdd={showAddTask} />
+        <div className="grid-container">
+          <div className="title">
+            <Header />
+          </div>
           <Route path='/' exact render={(props) => (
             <>
-              {showAddTask && <AddTask onAdd={addTask} />}
-              {tasks.length > 0 ? <Tasks tasks={tasks.filter((task) => task.Completion === false)} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} /> : ('No Tasks To Show')}
+              <div className="body">
+                {tasks.length > 0 ? <Tasks tasks={tasks.filter((task) => task.Completion === false)} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} onAdd={addTask} /> : ('No Tasks To Show')}
+                {tasks.length > 0 ? <Tasks tasks={tasks.filter((task) => task.Completion === false)} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} onAdd={addTask} /> : ('No Tasks To Show')}
+                {tasks.length > 0 ? <Tasks tasks={tasks.filter((task) => task.Completion === false)} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} onAdd={addTask} /> : ('No Tasks To Show')}
+              </div>
+              <div className="sidebar">
+                <AddFollowing onFollow={addFollowing} ></AddFollowing>
+                <Following following={following}></Following>
+              </div>
             </>
           )} />
           <Route path='/about' component={About} />
-          <Footer />
+          <div className="footer">
+            <Footer />
+          </div>
         </div>
       ) : (
           <Login onUser={userInput} ></Login>
