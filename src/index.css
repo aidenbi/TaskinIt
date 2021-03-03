@@ -16,7 +16,6 @@ body {
   margin: 30px auto;
   overflow: auto;
   min-height: 300px;
-  /* border: 1px solid steelblue; */
   padding: 30px;
   border-radius: 5px;
 }
@@ -179,3 +178,13 @@ footer {
   margin-left: auto;
 }
 
+.logincontainer {
+  text-align: center;
+  font-size: large;
+  max-width: 400px;
+  margin: 100px auto;
+  overflow: auto;
+  min-height: 300px;
+  padding: 30px;
+  border-radius: 5px;
+}

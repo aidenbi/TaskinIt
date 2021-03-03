@@ -22,7 +22,7 @@ const App = (counter) => {
     }
 
     getTasks()
-  })
+  }, [username])
 
   // Fetch Tasks
   const fetchTasks = async () => {
