@@ -27,13 +27,22 @@
   grid-area: title;
   text-align: center;
  }
-.sidebar { grid-area: sidebar; }
+.sidebar { 
+  grid-area: sidebar;
+  padding: 10px;
+  border-radius: 10px 0px 0px 10px ;
+  /* border-left: 1px solid black; */
+  background-color: rgb(219, 215, 215);
+ }
 .body { 
   grid-area: body;
   display:grid;
   grid-auto-flow: column;
-  gap: 0px 10px;
-  padding:0 10px;
+  gap: 0px 50px;
+  padding:0 50px;
+  overflow: scroll;
+  overflow-x: hidden;
+
 }
 .footer { 
   grid-area: footer;
@@ -42,8 +51,11 @@
 
 .grid-container1 {
   margin: auto;
+  margin-top: 20px;
   background: #ffffff;
   border: 1px solid rgb(175, 172, 172);
+  box-shadow: 1px 3px rgb(56, 54, 54);
+  border-radius: 10px;
   padding: 10px 20px;
   cursor: pointer;
   display: grid;
@@ -163,6 +175,7 @@
 
 .add-form {
   margin-bottom: 40px;
+  text-align: left;
 }
 
 .form-control {
