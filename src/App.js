@@ -22,11 +22,12 @@ const App = (counter) => {
     }
 
     getTasks()
-  }, [])
+  })
 
   // Fetch Tasks
   const fetchTasks = async () => {
-    const res = await fetch('https://taskinit-backend.herokuapp.com/tasks')
+    console.log(username)
+    const res = await fetch(`https://taskinit-backend.herokuapp.com/tasks?Username=${username}`)
     const data = await res.json()
 
     return data
@@ -46,7 +47,8 @@ const App = (counter) => {
   const addTask = async (task) => {
     task.Difficulty = 1;
     task.Completion = false;
-    const res = await fetch('https://taskinit-backend.herokuapp.com/tasks', {
+    task.Username = username
+    const res = await fetch(`https://taskinit-backend.herokuapp.com/tasks`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -198,7 +200,6 @@ const App = (counter) => {
   //User name's input
   const userInput = (username) => {
     setUsername(username)
-    console.log("hi", username)
   }
 
   return (
