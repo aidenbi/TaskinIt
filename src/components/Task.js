@@ -1,7 +1,6 @@
 import { FaTimes } from 'react-icons/fa';
 import { GoDash } from 'react-icons/go';
 import { FiPlus } from "react-icons/fi";
-import Button from '@material-ui/core/Button';
 import React from 'react';
 
 
@@ -22,7 +21,7 @@ const Task = ({ task, onDelete, onToggle, onUp, onDown, onComplete, username }) 
                     <div className={`up ${task.Difficulty === 9 ? 'max' : ''}`}><FiPlus onClick={() => onUp(task.id)} /></div>
                     <div className={`down ${task.Difficulty === 1 ? 'max' : ''}`}><GoDash onClick={() => onDown(task.id)} /></div>
                     <div className="taskDay">{task.day}</div>
-                    <div className="compButton"><Button variant="outlined" onClick={() => onComplete(task.id)}>COMPLETE</Button></div>
+                    <div className="compButton"><button className="btn btn-block" onClick={() => onComplete(task.id)}>COMPLETE</button></div>
                 </>
                 : ""}
         </div>

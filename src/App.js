@@ -10,7 +10,7 @@ import TasksList from './components/TasksList'
 
 
 const App = () => {
-
+  const [showSelectedTasks, setShowSelectedTasks] = useState(false)
   const [tasks, setTasks] = useState([
   ])
   const [following, setFollowing] = useState([

@@ -47,6 +47,10 @@
   overflow-x: hidden;
 }
 
+.bodyplaninner {
+  width: fit-content;
+}
+
 
 .body::-webkit-scrollbar-track
 {
@@ -75,6 +79,7 @@
 }
 
 .grid-container1 {
+  width: 500px;
   margin: auto;
   margin-top: 20px;
   background: #ffffff;

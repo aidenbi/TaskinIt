@@ -3,7 +3,7 @@ import AddTask from './AddTask'
 
 const Tasks = ({ tasks, onDelete, onToggle, onUp, onDown, onComplete, onAdd, username }) => {
     return (
-        <div>
+        <div className="bodyplaninner">
             <div className="addbtn">
                 <AddTask onAdd={onAdd} />
             </div>
