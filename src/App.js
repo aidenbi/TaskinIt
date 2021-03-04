@@ -101,6 +101,13 @@ const App = () => {
 
   const addFollowing = async (follow) => {
     follow.Username = username;
+    let i = 0;
+    for (i = 0; i < following.length; i++) {
+      if (following[i].following === follow.following && following[i].Username === follow.Username) {
+        alert("You have already followed this person!")
+        return
+      }
+    }
     const res = await fetch('https://taskinit-backend.herokuapp.com/following', {
       method: 'POST',
       headers: {
