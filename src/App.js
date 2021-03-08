@@ -47,7 +47,7 @@ const App = () => {
 
   // Fetch Tasks
   const fetchTasks = async () => {
-    const res = await fetch(`https://taskinit-backend.herokuapp.com/tasks?Username=${username}`)
+    const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks?Username=${username}`)
     const data = await res.json()
 
     return data
@@ -55,7 +55,7 @@ const App = () => {
 
   // Fetch Task
   const fetchTask = async (id) => {
-    const res = await fetch(`https://taskinit-backend.herokuapp.com/tasks/${id}`)
+    const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks/${id}`)
     const data = await res.json()
 
     return data
@@ -63,7 +63,7 @@ const App = () => {
 
   // Fetch Following Specific to User
   const fetchFollowing = async () => {
-    const res = await fetch(`https://taskinit-backend.herokuapp.com/following?Username=${username}`)
+    const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/following?Username=${username}`)
     const data = await res.json()
 
     return data
@@ -72,7 +72,7 @@ const App = () => {
 
   // Fetch Tasks for specific user
   const fetchSpecificTasks = async (tarUsername) => {
-    const res = await fetch(`https://taskinit-backend.herokuapp.com/tasks?Username=${tarUsername}`)
+    const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks?Username=${tarUsername}`)
     const data = await res.json()
 
     setTasksList([...tasksList, data])
@@ -84,7 +84,7 @@ const App = () => {
     task.Difficulty = 1;
     task.Completion = false;
     task.Username = username
-    const res = await fetch(`https://taskinit-backend.herokuapp.com/tasks`, {
+    const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -108,7 +108,7 @@ const App = () => {
         return
       }
     }
-    const res = await fetch('https://taskinit-backend.herokuapp.com/following', {
+    const res = await fetch('https://taskinit-backendmangodb.herokuapp.com/following', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -125,11 +125,11 @@ const App = () => {
 
   // Delete Task
   const deleteTask = async (id) => {
-    await fetch(`https://taskinit-backend.herokuapp.com/tasks/${id}`, {
+    await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks/${id}`, {
       method: 'DELETE'
     })
 
-    setTasks(tasks.filter((task) => task.id !== id))
+    setTasks(tasks.filter((task) => task._id !== id))
 
   }
 
@@ -141,7 +141,7 @@ const App = () => {
       reminder: !taskToToggle.reminder
     }
 
-    const res = await fetch(`https://taskinit-backend.herokuapp.com/tasks/${id}`, {
+    const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks/${id}`, {
       method: 'PUT',
       headers: {
         'Content-type': 'application/json'
@@ -154,7 +154,7 @@ const App = () => {
 
     setTasks(
       tasks.map((task) =>
-        task.id === id ? {
+        task._id === id ? {
           ...task, reminder:
             data.reminder
         } : task
@@ -170,7 +170,7 @@ const App = () => {
       Difficulty: taskAdjusted.Difficulty !== 9 ? (taskAdjusted.Difficulty + 1) : 9
     }
 
-    const res = await fetch(`https://taskinit-backend.herokuapp.com/tasks/${id}`, {
+    const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks/${id}`, {
       method: 'PUT',
       headers: {
         'Content-type': 'application/json'
@@ -182,7 +182,7 @@ const App = () => {
 
     setTasks(
       tasks.map((task) =>
-        task.id === id ? {
+        task._id === id ? {
           ...task, Difficulty:
             data.Difficulty
         } : task
@@ -199,7 +199,7 @@ const App = () => {
       Difficulty: taskAdjusted.Difficulty !== 1 ? (taskAdjusted.Difficulty - 1) : 1
     }
 
-    const res = await fetch(`https://taskinit-backend.herokuapp.com/tasks/${id}`, {
+    const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks/${id}`, {
       method: 'PUT',
       headers: {
         'Content-type': 'application/json'
@@ -211,7 +211,7 @@ const App = () => {
 
     setTasks(
       tasks.map((task) =>
-        task.id === id ? {
+        task._id === id ? {
           ...task, Difficulty:
             data.Difficulty
         } : task
@@ -228,7 +228,7 @@ const App = () => {
       Completion: true
     }
 
-    const res = await fetch(`https://taskinit-backend.herokuapp.com/tasks/${id}`, {
+    const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks/${id}`, {
       method: 'PUT',
       headers: {
         'Content-type': 'application/json'
@@ -240,7 +240,7 @@ const App = () => {
 
     setTasks(
       tasks.map((task) =>
-        task.id === id ? {
+        task._id === id ? {
           ...task, Completion:
             data.Completion
         } : task
@@ -282,8 +282,8 @@ const App = () => {
           </div>
         </div>
       ) : (
-          <Login onUser={userInput} ></Login>
-        )
+        <Login onUser={userInput} ></Login>
+      )
       }
     </Router>
   );

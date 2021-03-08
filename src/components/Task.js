@@ -10,18 +10,18 @@ const Task = ({ task, onDelete, onToggle, onUp, onDown, onComplete, username }) 
     return (
         <div className={`grid-container1 ${task.reminder ?
             'reminder' : ''}`}
-            onDoubleClick={() => onToggle(task.id)}>
+            onDoubleClick={() => onToggle(task._id)}>
             <div className="taskDifficulty">{task.Difficulty}</div>
             <div className="taskName">
                 {task.text}
             </div>
             { username === task.Username ?
                 <>
-                    <div className="x"><FaTimes style={{ color: 'red', cursor: 'pointer' }} onClick={() => onDelete(task.id)} /></div>
-                    <div className={`up ${task.Difficulty === 9 ? 'max' : ''}`}><FiPlus onClick={() => onUp(task.id)} /></div>
-                    <div className={`down ${task.Difficulty === 1 ? 'max' : ''}`}><GoDash onClick={() => onDown(task.id)} /></div>
+                    <div className="x"><FaTimes style={{ color: 'red', cursor: 'pointer' }} onClick={() => onDelete(task._id)} /></div>
+                    <div className={`up ${task.Difficulty === 9 ? 'max' : ''}`}><FiPlus onClick={() => onUp(task._id)} /></div>
+                    <div className={`down ${task.Difficulty === 1 ? 'max' : ''}`}><GoDash onClick={() => onDown(task._id)} /></div>
                     <div className="taskDay">{task.day}</div>
-                    <div className="compButton"><button className="btn btn-block" onClick={() => onComplete(task.id)}>COMPLETE</button></div>
+                    <div className="compButton"><button className="btn btn-block" onClick={() => onComplete(task._id)}>COMPLETE</button></div>
                 </>
                 : ""}
         </div>
