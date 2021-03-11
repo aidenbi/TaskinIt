@@ -9,7 +9,7 @@ const Tasks = ({ tasks, onDelete, onToggle, onUp, onDown, onComplete, onAdd }) =
             </div>
             {tasks.length > 0 ?
                 <>
-                    {tasks.map((task, index) => (
+                    {tasks.filter((task) => task.Completion === false).map((task, index) => (
                         <Task key={index} task={task} onDelete={onDelete} onToggle={onToggle} onUp={onUp} onDown={onDown} onComplete={onComplete} />))
                     }
                 </>

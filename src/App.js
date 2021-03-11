@@ -222,7 +222,7 @@ const App = () => {
           <Route path='/' exact render={(props) => (
             <>
               <div className="body">
-                <TasksList tasksList={tasksList[0]} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} onAdd={addTask}></TasksList>
+                <TasksList tasksList={tasksList} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} onAdd={addTask}></TasksList>
               </div>
               <div className="sidebar">
                 {/* <AddFollowing onFollow={addFollowing} ></AddFollowing> */}

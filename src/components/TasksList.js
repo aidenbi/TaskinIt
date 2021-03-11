@@ -4,8 +4,8 @@ const TasksList = ({ tasksList, onDelete, onToggle, onUp, onDown, onComplete, on
     console.log(tasksList)
     return (
         <div className="bodyplan">
-            {tasksList.map((index) => (
-                <Tasks key={index} tasks={tasksList.filter((task) => task.Completion === false)} onDelete={onDelete} onToggle={onToggle} onUp={onUp} onDown={onDown} onComplete={onComplete} onAdd={onAdd} />
+            {tasksList.map((tasks, index) => (
+                <Tasks key={index} tasks={tasks} onDelete={onDelete} onToggle={onToggle} onUp={onUp} onDown={onDown} onComplete={onComplete} onAdd={onAdd} />
             ))}
         </div>
     )

@@ -7,6 +7,8 @@ import React from 'react';
 
 
 const Task = ({ task, onDelete, onToggle, onUp, onDown, onComplete }) => {
+    console.log(task)
+    console.log(task["text"])
     return (
         <div className={`grid-container1 ${task.reminder ?
             'reminder' : ''}`}
