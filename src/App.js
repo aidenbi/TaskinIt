@@ -9,47 +9,30 @@ import AddFollowing from './components/AddFollowing'
 import TasksList from './components/TasksList'
 
 
+
 const App = () => {
-  const [showSelectedTasks, setShowSelectedTasks] = useState(false)
-  const [tasks, setTasks] = useState([
-  ])
-  const [following, setFollowing] = useState([
-  ])
-  const [username, setUsername] = useState("")
+  const [auth, setAuth] = useState(false)
   const [tasksList, setTasksList] = useState([
   ])
 
-  useEffect(() => {
-    const getTasks = async () => {
-      const tasksFromServer = await fetchTasks()
-      setTasks(tasksFromServer)
-      setTasksList([tasksFromServer])
-    }
 
-    getTasks()
-
-    const getFollowing = async () => {
-      const followingFromServer = await fetchFollowing()
-      setFollowing(followingFromServer)
-    }
-
-    getFollowing()
-
-  }, [username])
+  const getTasks = async () => {
+    const tasksFromServer = await fetchTasks()
+    setTasksList([tasksFromServer])
+  }
 
 
-  useEffect(() => {
 
-    setTasksList([tasks, ...tasksList.splice(1)])
 
-  }, [tasks])
+
 
 
   // Fetch Tasks
   const fetchTasks = async () => {
-    const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks?Username=${username}`)
+    const res = await fetch("https://taskinit-backendmangodb.herokuapp.com/tasks", {
+      credentials: 'include'
+    })
     const data = await res.json()
-
     return data
   }
 
@@ -61,30 +44,13 @@ const App = () => {
     return data
   }
 
-  // Fetch Following Specific to User
-  const fetchFollowing = async () => {
-    const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/following?Username=${username}`)
-    const data = await res.json()
-
-    return data
-  }
-
-
-  // Fetch Tasks for specific user
-  const fetchSpecificTasks = async (tarUsername) => {
-    const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks?Username=${tarUsername}`)
-    const data = await res.json()
-
-    setTasksList([...tasksList, data])
-  }
 
 
   // Add Task
   const addTask = async (task) => {
     task.Difficulty = 1;
     task.Completion = false;
-    task.Username = username
-    const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks`, {
+    const res = await fetch("https://taskinit-backendmangodb.herokuapp.com/tasks", {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -94,32 +60,11 @@ const App = () => {
 
     const data = await res.json()
 
-    setTasks([...tasks, data])
+    setTasksList[0]([...data])
   }
 
   //Add Following
 
-  const addFollowing = async (follow) => {
-    follow.Username = username;
-    let i = 0;
-    for (i = 0; i < following.length; i++) {
-      if (following[i].following === follow.following && following[i].Username === follow.Username) {
-        alert("You have already followed this person!")
-        return
-      }
-    }
-    const res = await fetch('https://taskinit-backendmangodb.herokuapp.com/following', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(follow)
-    })
-
-    const data = await res.json()
-
-    setFollowing([...following, data])
-  }
 
 
 
@@ -129,7 +74,7 @@ const App = () => {
       method: 'DELETE'
     })
 
-    setTasks(tasks.filter((task) => task._id !== id))
+    setTasksList[0](tasksList[0].filter((task) => task._id !== id))
 
   }
 
@@ -152,8 +97,8 @@ const App = () => {
     const data = await res.json()
 
 
-    setTasks(
-      tasks.map((task) =>
+    setTasksList[0](
+      tasksList[0].map((task) =>
         task._id === id ? {
           ...task, reminder:
             data.reminder
@@ -180,8 +125,8 @@ const App = () => {
 
     const data = await res.json()
 
-    setTasks(
-      tasks.map((task) =>
+    setTasksList[0](
+      tasksList[0].map((task) =>
         task._id === id ? {
           ...task, Difficulty:
             data.Difficulty
@@ -209,8 +154,8 @@ const App = () => {
 
     const data = await res.json()
 
-    setTasks(
-      tasks.map((task) =>
+    setTasksList[0](
+      tasksList[0].map((task) =>
         task._id === id ? {
           ...task, Difficulty:
             data.Difficulty
@@ -238,8 +183,8 @@ const App = () => {
 
     const data = await res.json()
 
-    setTasks(
-      tasks.map((task) =>
+    setTasksList[0](
+      tasksList[0].map((task) =>
         task._id === id ? {
           ...task, Completion:
             data.Completion
@@ -251,16 +196,25 @@ const App = () => {
 
   }
 
+  const login = async (user) => {
+    await fetch('https://taskinit-backendmangodb.herokuapp.com/api/user/login', {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(user)
+    })
+    await getTasks()
+    setAuth(!auth)
 
-  //User name's input
-  const userInput = (username) => {
-    setUsername(username)
   }
+
 
   return (
 
     <Router>
-      {username !== "" ? (
+      {auth ? (
         <div className="grid-container">
           <div className="title">
             <Header />
@@ -268,11 +222,11 @@ const App = () => {
           <Route path='/' exact render={(props) => (
             <>
               <div className="body">
-                <TasksList tasksList={tasksList} username={username} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} onAdd={addTask}></TasksList>
+                <TasksList tasksList={tasksList[0]} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} onAdd={addTask}></TasksList>
               </div>
               <div className="sidebar">
-                <AddFollowing onFollow={addFollowing} ></AddFollowing>
-                <Following following={following} tarUsername={fetchSpecificTasks} ></Following>
+                {/* <AddFollowing onFollow={addFollowing} ></AddFollowing> */}
+                {/* <Following following={following} tarUsername={fetchSpecificTasks} ></Following> */}
               </div>
             </>
           )} />
@@ -282,7 +236,7 @@ const App = () => {
           </div>
         </div>
       ) : (
-        <Login onUser={userInput} ></Login>
+        <Login onLogin={login}></Login>
       )
       }
     </Router>

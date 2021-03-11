@@ -1,7 +1,7 @@
 import Task from './Task';
 import AddTask from './AddTask'
 
-const Tasks = ({ tasks, onDelete, onToggle, onUp, onDown, onComplete, onAdd, username }) => {
+const Tasks = ({ tasks, onDelete, onToggle, onUp, onDown, onComplete, onAdd }) => {
     return (
         <div className="bodyplaninner">
             <div className="addbtn">
@@ -10,7 +10,7 @@ const Tasks = ({ tasks, onDelete, onToggle, onUp, onDown, onComplete, onAdd, use
             {tasks.length > 0 ?
                 <>
                     {tasks.map((task, index) => (
-                        <Task key={index} task={task} username={username} onDelete={onDelete} onToggle={onToggle} onUp={onUp} onDown={onDown} onComplete={onComplete} />))
+                        <Task key={index} task={task} onDelete={onDelete} onToggle={onToggle} onUp={onUp} onDown={onDown} onComplete={onComplete} />))
                     }
                 </>
                 : ('No Tasks To Show')
