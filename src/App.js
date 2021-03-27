@@ -23,7 +23,9 @@ const App = () => {
 
 
 
+  useEffect({
 
+  }, [setTasksList])
 
 
 
