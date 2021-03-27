@@ -51,6 +51,7 @@ const App = () => {
     task.Difficulty = 1;
     task.Completion = false;
     const res = await fetch("https://taskinit-backendmangodb.herokuapp.com/tasks", {
+      credentials: 'include',
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
