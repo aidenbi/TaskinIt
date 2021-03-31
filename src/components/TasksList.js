@@ -1,7 +1,6 @@
 import Tasks from './Tasks'
 
 const TasksList = ({ tasksList, onDelete, onToggle, onUp, onDown, onComplete, onAdd }) => {
-    console.log(tasksList)
     return (
         <div className="bodyplan">
             {tasksList.map((tasks, index) => (

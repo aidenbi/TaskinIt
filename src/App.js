@@ -23,9 +23,6 @@ const App = () => {
 
 
 
-  useEffect({
-
-  }, [setTasksList])
 
 
 
@@ -61,9 +58,7 @@ const App = () => {
       body: JSON.stringify(task)
     })
 
-    const data = await res.json()
-
-    setTasksList[0]([...data])
+    getTasks()
   }
 
   //Add Following
@@ -77,7 +72,7 @@ const App = () => {
       method: 'DELETE'
     })
 
-    setTasksList[0](tasksList[0].filter((task) => task._id !== id))
+    getTasks()
 
   }
 
@@ -90,24 +85,14 @@ const App = () => {
     }
 
     const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks/${id}`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-type': 'application/json'
       },
       body: JSON.stringify(updTask)
     })
 
-    const data = await res.json()
-
-
-    setTasksList[0](
-      tasksList[0].map((task) =>
-        task._id === id ? {
-          ...task, reminder:
-            data.reminder
-        } : task
-      )
-    )
+    getTasks()
   }
 
   // taskDiffup
@@ -119,23 +104,14 @@ const App = () => {
     }
 
     const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks/${id}`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-type': 'application/json'
       },
       body: JSON.stringify(updTaskc)
     })
 
-    const data = await res.json()
-
-    setTasksList[0](
-      tasksList[0].map((task) =>
-        task._id === id ? {
-          ...task, Difficulty:
-            data.Difficulty
-        } : task
-      )
-    )
+    getTasks()
   }
 
 
@@ -148,23 +124,14 @@ const App = () => {
     }
 
     const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks/${id}`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-type': 'application/json'
       },
       body: JSON.stringify(updTaskc)
     })
 
-    const data = await res.json()
-
-    setTasksList[0](
-      tasksList[0].map((task) =>
-        task._id === id ? {
-          ...task, Difficulty:
-            data.Difficulty
-        } : task
-      )
-    )
+    getTasks()
   }
 
 
@@ -177,7 +144,7 @@ const App = () => {
     }
 
     const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks/${id}`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-type': 'application/json'
       },
@@ -186,21 +153,12 @@ const App = () => {
 
     const data = await res.json()
 
-    setTasksList[0](
-      tasksList[0].map((task) =>
-        task._id === id ? {
-          ...task, Completion:
-            data.Completion
-        } : task
-
-
-      )
-    )
+    getTasks()
 
   }
 
   const login = async (user) => {
-    await fetch('https://taskinit-backendmangodb.herokuapp.com/api/user/login', {
+    const res = await fetch('https://taskinit-backendmangodb.herokuapp.com/api/user/login', {
       credentials: 'include',
       method: 'POST',
       headers: {
@@ -208,9 +166,12 @@ const App = () => {
       },
       body: JSON.stringify(user)
     })
-    await getTasks()
-    setAuth(!auth)
 
+    console.log(res)
+    if (res.ok) {
+      getTasks()
+      setAuth(true)
+    }
   }
 
 
