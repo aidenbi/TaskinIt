@@ -27,6 +27,9 @@
   grid-area: title;
   text-align: center;
  }
+.webtitle { 
+  text-align: center;
+}
 .sidebar { 
   grid-area: sidebar;
   padding: 10px;
@@ -181,9 +184,10 @@
   transform: scale(0.98);
 }
 
-.btn-block {
+/* .btn-block {
   display: block;
-}
+
+} */
 
 .logincontainer {
   text-align: center;
@@ -205,7 +209,7 @@
 
 .add-form {
   margin-bottom: 40px;
-  text-align: left;
+  text-align: center;
 }
 
 .form-control {

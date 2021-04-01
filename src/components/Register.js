@@ -1,13 +1,12 @@
 import React from 'react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
-const Login = ({ onLogin, webtitle, onClick }) => {
+const Register = ({ onRegister, webtitle, onSubmitz, onClick }) => {
 
     const [name, setName] = useState()
     const [password, setPassword] = useState()
-
-
+    const [password2, setPassword2] = useState()
 
     const onSubmit = (e) => {
 
@@ -18,12 +17,18 @@ const Login = ({ onLogin, webtitle, onClick }) => {
             return
         }
 
-        onLogin({ name, password })
+        if (password !== password2) {
+            alert('Password does not match')
+            setPassword('')
+            setPassword2('')
+            return
+        } else {
+            onRegister({ name, password })
+            onSubmitz()
+        }
+
 
     }
-
-
-
 
     return (
         <div className="logincontainer">
@@ -39,18 +44,20 @@ const Login = ({ onLogin, webtitle, onClick }) => {
                     <label>Password</label>
                     <input type='text' placeholder='Password' type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 </div>
+                <div className='form-control'>
+                    <label>Confirm Password</label>
+                    <input type='text' placeholder='Confirm Password' type="password" value={password2} onChange={(e) => setPassword2(e.target.value)} />
+                </div>
                 <input type='submit' value="Login" className="btn btn-block" />
             </form>
-            <Link to='/register'>
-                <button onClick={onClick}> Sign Up!</button>
+            <Link to='/'>
+                <button onClick={onClick} >Login Now!</button>
             </Link>
         </div>
-
     )
 }
-
-Login.defaultProps = {
-    webtitle: 'Login',
+Register.defaultProps = {
+    webtitle: 'Register',
 }
 
-export default Login
+export default Register

@@ -1,17 +1,19 @@
 import PropTypes from 'prop-types'
-import Button from './Button'
-import { useLocation } from 'react-router-dom'
 
 
-const Header = ({ title }) => {
+
+const Header = ({ title, onClick, auth }) => {
 
     return (
-        <div>
-            <header className='header'>
-                <h1>{title}</h1>
-            </header>
+        <>
+            <div>
+                <header>
+                    <h1>{title}</h1>
+                </header>
 
-        </div>
+            </div>
+            {auth && <button onClick={onClick} >signout</button>}
+        </>
     )
 }
 

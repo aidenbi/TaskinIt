@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import About from './components/About'
@@ -7,13 +7,14 @@ import Login from './components/Login'
 import Following from './components/Following'
 import AddFollowing from './components/AddFollowing'
 import TasksList from './components/TasksList'
-
+import Register from './components/Register'
 
 
 const App = () => {
   const [auth, setAuth] = useState(false)
   const [tasksList, setTasksList] = useState([
   ])
+  const [loginPage, setLoginPage] = useState(true)
 
 
   const getTasks = async () => {
@@ -22,9 +23,10 @@ const App = () => {
   }
 
 
+  useEffect(() => {
+    getTasks()
 
-
-
+  }, []);
 
   // Fetch Tasks
   const fetchTasks = async () => {
@@ -32,6 +34,10 @@ const App = () => {
       credentials: 'include'
     })
     const data = await res.json()
+
+    if (Array.isArray(data)) {
+      setAuth(true)
+    }
     return data
   }
 
@@ -57,7 +63,8 @@ const App = () => {
       },
       body: JSON.stringify(task)
     })
-
+    const body = await res.json()
+    alert(body.msg.errors.day.message)
     getTasks()
   }
 
@@ -167,21 +174,44 @@ const App = () => {
       body: JSON.stringify(user)
     })
 
-    console.log(res)
+    const body = await res.json()
     if (res.ok) {
       getTasks()
       setAuth(true)
+    } else {
+      alert(body.msg)
     }
   }
 
+  const register = async (regUser) => {
+    const res = await fetch('https://taskinit-backendmangodb.herokuapp.com/api/user/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(regUser)
 
+    })
+    const body = await res.json()
+    alert(body.msg)
+
+  }
+
+  const logout = async () => {
+    const res = await fetch('https://taskinit-backendmangodb.herokuapp.com/api/user/logout', {
+      credentials: 'include'
+    })
+    const data = await res.json()
+    alert(data.msg)
+    setAuth(false)
+  }
   return (
 
     <Router>
       {auth ? (
         <div className="grid-container">
           <div className="title">
-            <Header />
+            <Header onClick={logout} auth={auth} />
           </div>
           <Route path='/' exact render={(props) => (
             <>
@@ -200,7 +230,21 @@ const App = () => {
           </div>
         </div>
       ) : (
-        <Login onLogin={login}></Login>
+        <>
+          <div className="title">
+            <Header />
+          </div>
+          <Switch>
+            {loginPage &&
+              <Route path='/'>
+                <Login onLogin={login} onClick={() => { setLoginPage(false) }} />
+              </Route>
+            }
+            <Route path='/register'>
+              <Register onRegister={register} onSubmitz={() => { setLoginPage(true) }} onClick={() => { setLoginPage(true) }}></Register>
+            </Route>
+          </Switch>
+        </>
       )
       }
     </Router>
