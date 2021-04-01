@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import About from './components/About'
@@ -16,7 +16,21 @@ const App = () => {
   ])
   const [loginPage, setLoginPage] = useState(true)
 
+  if (window.location.protocol == 'http:') {
 
+    console.log("you are accessing us via "
+      + "an insecure protocol (HTTP). "
+      + "Redirecting you to HTTPS.");
+
+    window.location.href =
+      window.location.href.replace(
+        'http:', 'https:');
+  }
+  else
+    (window.location.protocol == "https:") {
+    console.log("you are accessing us via"
+      + " our secure HTTPS protocol.");
+  }
   const getTasks = async () => {
     const tasksFromServer = await fetchTasks()
     setTasksList([tasksFromServer])
@@ -177,7 +191,7 @@ const App = () => {
 
     const body = await res.json()
     if (res.ok) {
-      await getTasks()
+      getTasks()
       setAuth(true)
     } else {
       alert(body.msg)
@@ -209,11 +223,13 @@ const App = () => {
   return (
 
     <Router>
+      <Redirect />
       {auth ? (
         <div className="grid-container">
           <div className="title">
             <Header onClick={logout} auth={auth} />
           </div>
+          <Redirect to="/" />
           <Route path='/' exact render={(props) => (
             <>
               <div className="body">
