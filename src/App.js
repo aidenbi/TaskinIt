@@ -177,7 +177,7 @@ const App = () => {
 
     const body = await res.json()
     if (res.ok) {
-      getTasks()
+      await getTasks()
       setAuth(true)
     } else {
       alert(body.msg)
