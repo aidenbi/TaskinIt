@@ -25,15 +25,15 @@ const App = () => {
 
   useEffect(() => {
     getTasks()
-    securebrowse()
+    // securebrowse()
   }, []);
 
 
-  const securebrowse = async () => {
-    await fetch("https://taskinit-backendmangodb.herokuapp.com", {
-      method: 'GET'
-    })
-  }
+  // const securebrowse = async () => {
+  //   await fetch("https://taskinit-backendmangodb.herokuapp.com", {
+  //     method: 'GET'
+  //   })
+  // }
   // Fetch Tasks
   const fetchTasks = async () => {
     const res = await fetch("https://taskinit-backendmangodb.herokuapp.com/tasks", {
