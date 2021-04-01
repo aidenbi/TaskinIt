@@ -64,8 +64,9 @@ const App = () => {
       body: JSON.stringify(task)
     })
     const body = await res.json()
+    await getTasks()
     alert(body.msg.errors.day.message)
-    getTasks()
+
   }
 
   //Add Following
