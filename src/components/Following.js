@@ -5,9 +5,10 @@ const Following = ({ following, tarUsername }) => {
     return (
         <div>
             <a>Following</a>
-            {following.map((follow, index) => (
-                <Follow key={index} follow={follow} tarUsername={tarUsername} />
-            ))}
+            {Array.isArray(following) &&
+                following.map((follow, index) => (
+                    <Follow key={index} follow={follow} tarUsername={tarUsername} />
+                ))}
         </div>
     )
 }

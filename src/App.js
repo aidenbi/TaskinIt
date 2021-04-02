@@ -8,35 +8,56 @@ import Following from './components/Following'
 import AddFollowing from './components/AddFollowing'
 import TasksList from './components/TasksList'
 import Register from './components/Register'
+import update from 'react-addons-update';
 
 
 const App = () => {
   const [auth, setAuth] = useState(false)
   const [tasksList, setTasksList] = useState([
   ])
+  const [followingx, setFollowingx] = useState()
   const [loginPage, setLoginPage] = useState(true)
+  const fetchURL = 'https://taskinit-backendmangodb.herokuapp.com'
 
 
   const getTasks = async () => {
     const tasksFromServer = await fetchTasks()
-    setTasksList([tasksFromServer])
+    // console.log(tasksList)
+    // // if (tasksList === []) {
+    // // setTasksList([tasksFromServer])
+    // // } else {
+    // let ownTasks = tasksList
+    // //   console.log(tasksFromServer)
+    // ownTasks[0] = tasksFromServer
+    setTasksList(update(tasksList, {
+      [0]: {
+        $set: tasksFromServer
+      }
+    }))
+    // }
   }
 
 
+  const getFollowing = async () => {
+    const followingsFromServer = await fetchFollowings()
+    setFollowingx(followingsFromServer)
+  }
+  const getfollowingTasks = async (user) => {
+    const followingTasks = await fetchTarTasks(user)
+    console.log(1)
+    setTasksList([...tasksList, followingTasks])
+    console.log(tasksList)
+  }
+
   useEffect(() => {
     getTasks()
-    // securebrowse()
+    getFollowing()
   }, []);
 
 
-  // const securebrowse = async () => {
-  //   await fetch("https://taskinit-backendmangodb.herokuapp.com", {
-  //     method: 'GET'
-  //   })
-  // }
   // Fetch Tasks
   const fetchTasks = async () => {
-    const res = await fetch("https://taskinit-backendmangodb.herokuapp.com/tasks", {
+    const res = await fetch(`${fetchURL}/tasks`, {
       credentials: 'include'
     })
     const data = await res.json()
@@ -49,19 +70,36 @@ const App = () => {
 
   // Fetch Task
   const fetchTask = async (id) => {
-    const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks/${id}`)
+    const res = await fetch(`${fetchURL}/tasks/${id}`)
     const data = await res.json()
 
     return data
   }
 
+  // Fetch followings
+  const fetchFollowings = async () => {
+    const res = await fetch(`${fetchURL}/following`, {
+      credentials: 'include'
+    })
+    const data = await res.json()
+    return data
+  }
 
+  //Fetch Target User Tasks
+  const fetchTarTasks = async (user) => {
+
+    const res = await fetch(`${fetchURL}/tasks/tartasks/${user.following}`, {
+      credentials: 'include'
+    })
+    const data = await res.json()
+    return data
+  }
 
   // Add Task
   const addTask = async (task) => {
     task.Difficulty = 1;
     task.Completion = false;
-    const res = await fetch("https://taskinit-backendmangodb.herokuapp.com/tasks", {
+    const res = await fetch(`${fetchURL}/tasks`, {
       credentials: 'include',
       method: 'POST',
       headers: {
@@ -71,18 +109,45 @@ const App = () => {
     })
     const body = await res.json()
     await getTasks()
-    alert(body.msg.errors.day.message)
+    if (!task.day) {
+      alert(body.msg.errors.day.message)
+    }
+  }
+  //Add Following
+  const addFollowing = async (user) => {
+    const res = await fetch(`${fetchURL}/following`, {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(user)
+    })
+    const body = await res.json()
+    await getFollowing()
+    await getfollowingTasks(user)
+    if (body.msg) {
+      alert(body.msg)
+    }
 
   }
 
-  //Add Following
 
 
+
+
+  //UNFOLLOW
+  const deleteFollowing = async (tarUsername) => {
+    await fetch(`${fetchURL}/following/${tarUsername}`, {
+      method: 'DELETE'
+    })
+    getFollowing()
+  }
 
 
   // Delete Task
   const deleteTask = async (id) => {
-    await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks/${id}`, {
+    await fetch(`${fetchURL}/tasks/${id}`, {
       method: 'DELETE'
     })
 
@@ -98,7 +163,7 @@ const App = () => {
       reminder: !taskToToggle.reminder
     }
 
-    const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks/${id}`, {
+    const res = await fetch(`${fetchURL}/tasks/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-type': 'application/json'
@@ -117,7 +182,7 @@ const App = () => {
       Difficulty: taskAdjusted.Difficulty !== 9 ? (taskAdjusted.Difficulty + 1) : 9
     }
 
-    const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks/${id}`, {
+    const res = await fetch(`${fetchURL}/tasks/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-type': 'application/json'
@@ -137,7 +202,7 @@ const App = () => {
       Difficulty: taskAdjusted.Difficulty !== 1 ? (taskAdjusted.Difficulty - 1) : 1
     }
 
-    const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks/${id}`, {
+    const res = await fetch(`${fetchURL}/tasks/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-type': 'application/json'
@@ -157,7 +222,7 @@ const App = () => {
       Completion: true
     }
 
-    const res = await fetch(`https://taskinit-backendmangodb.herokuapp.com/tasks/${id}`, {
+    const res = await fetch(`${fetchURL}/tasks/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-type': 'application/json'
@@ -172,7 +237,7 @@ const App = () => {
   }
 
   const login = async (user) => {
-    const res = await fetch('https://taskinit-backendmangodb.herokuapp.com/api/user/login', {
+    const res = await fetch(`${fetchURL}/api/user/login`, {
       credentials: 'include',
       method: 'POST',
       headers: {
@@ -191,7 +256,7 @@ const App = () => {
   }
 
   const register = async (regUser) => {
-    const res = await fetch('https://taskinit-backendmangodb.herokuapp.com/api/user/register', {
+    const res = await fetch(`${fetchURL}/api/user/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -205,13 +270,15 @@ const App = () => {
   }
 
   const logout = async () => {
-    const res = await fetch('https://taskinit-backendmangodb.herokuapp.com/api/user/logout', {
+    const res = await fetch(`${fetchURL}/api/user/logout`, {
       credentials: 'include'
     })
     const data = await res.json()
     alert(data.msg)
     setAuth(false)
   }
+
+
   return (
 
     <Router>
@@ -227,8 +294,8 @@ const App = () => {
                 <TasksList tasksList={tasksList} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} onAdd={addTask}></TasksList>
               </div>
               <div className="sidebar">
-                {/* <AddFollowing onFollow={addFollowing} ></AddFollowing> */}
-                {/* <Following following={following} tarUsername={fetchSpecificTasks} ></Following> */}
+                <AddFollowing onFollow={addFollowing} ></AddFollowing>
+                <Following following={followingx} tarUsername={deleteFollowing} ></Following>
               </div>
             </>
           )} />

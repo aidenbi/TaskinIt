@@ -6,6 +6,7 @@ import React from 'react';
 
 
 
+
 const Task = ({ task, onDelete, onToggle, onUp, onDown, onComplete }) => {
 
     return (
@@ -21,8 +22,8 @@ const Task = ({ task, onDelete, onToggle, onUp, onDown, onComplete }) => {
             <div className={`down ${task.Difficulty === 1 ? 'max' : ''}`}><GoDash onClick={() => onDown(task._id)} /></div>
             <div className="taskDay">{task.day}</div>
             <div className="compButton"><button className="btn btn-block" onClick={() => onComplete(task._id)}>COMPLETE</button></div>
-
         </div>
+
     )
 }
 
