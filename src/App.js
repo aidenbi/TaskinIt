@@ -13,46 +13,57 @@ import update from 'react-addons-update';
 
 const App = () => {
   const [auth, setAuth] = useState(false)
-  const [tasksList, setTasksList] = useState([
-  ])
+  const [tasksList, setTasksList] = useState({})
   const [followingx, setFollowingx] = useState()
+  const [username, setUsername] = useState()
   const [loginPage, setLoginPage] = useState(true)
-  const fetchURL = 'https://taskinit-backendmangodb.herokuapp.com'
+  const fetchURL = 'http://localhost:8080'
 
+  useEffect(() => {
+    login()
+  }, []);
+
+  useEffect(() => {
+    getFollowing()
+    getTasks()
+  }, [auth])
 
   const getTasks = async () => {
     const tasksFromServer = await fetchTasks()
-    // console.log(tasksList)
-    // // if (tasksList === []) {
-    // // setTasksList([tasksFromServer])
-    // // } else {
-    // let ownTasks = tasksList
-    // //   console.log(tasksFromServer)
-    // ownTasks[0] = tasksFromServer
-    setTasksList(update(tasksList, {
-      [0]: {
-        $set: tasksFromServer
-      }
-    }))
-    // }
+    var data = tasksList
+    if (username) {
+      data[username] = tasksFromServer
+    }
+    setTasksList(data)
   }
 
-
+  console.log(username)
+  console.log(tasksList)
   const getFollowing = async () => {
     const followingsFromServer = await fetchFollowings()
     setFollowingx(followingsFromServer)
   }
+
   const getfollowingTasks = async (user) => {
     const followingTasks = await fetchTarTasks(user)
-    console.log(1)
-    setTasksList([...tasksList, followingTasks])
-    console.log(tasksList)
+    var data = tasksList
+    data[user] = followingTasks
+    setTasksList(data)
   }
 
-  useEffect(() => {
-    getTasks()
-    getFollowing()
-  }, []);
+  const removefollowingTasks = async (user) => {
+    var data = tasksList
+    delete data[user];
+    setTasksList(data)
+  }
+
+  const followingTasksToggle = async (user) => {
+    if (user in tasksList) {
+      removefollowingTasks(user)
+    } else {
+      getfollowingTasks(user)
+    }
+  }
 
 
   // Fetch Tasks
@@ -61,10 +72,6 @@ const App = () => {
       credentials: 'include'
     })
     const data = await res.json()
-
-    if (Array.isArray(data)) {
-      setAuth(true)
-    }
     return data
   }
 
@@ -86,9 +93,9 @@ const App = () => {
   }
 
   //Fetch Target User Tasks
-  const fetchTarTasks = async (user) => {
+  const fetchTarTasks = async (followname) => {
 
-    const res = await fetch(`${fetchURL}/tasks/tartasks/${user.following}`, {
+    const res = await fetch(`${fetchURL}/tasks/tartasks/${followname}`, {
       credentials: 'include'
     })
     const data = await res.json()
@@ -108,7 +115,7 @@ const App = () => {
       body: JSON.stringify(task)
     })
     const body = await res.json()
-    await getTasks()
+    getTasks()
     if (!task.day) {
       alert(body.msg.errors.day.message)
     }
@@ -125,7 +132,7 @@ const App = () => {
     })
     const body = await res.json()
     await getFollowing()
-    await getfollowingTasks(user)
+    await getfollowingTasks(user.following)
     if (body.msg) {
       alert(body.msg)
     }
@@ -245,11 +252,11 @@ const App = () => {
       },
       body: JSON.stringify(user)
     })
-
     const body = await res.json()
     if (res.ok) {
-      getTasks()
+      setUsername(body)
       setAuth(true)
+
     } else {
       alert(body.msg)
     }
@@ -276,13 +283,14 @@ const App = () => {
     const data = await res.json()
     alert(data.msg)
     setAuth(false)
+    setTasksList({})
   }
 
 
   return (
 
     <Router>
-      {auth ? (
+      {auth && Object.keys(tasksList) !== 0 ? (
         <div className="grid-container">
           <div className="title">
             <Header onClick={logout} auth={auth} />
@@ -295,7 +303,7 @@ const App = () => {
               </div>
               <div className="sidebar">
                 <AddFollowing onFollow={addFollowing} ></AddFollowing>
-                <Following following={followingx} tarUsername={deleteFollowing} ></Following>
+                <Following following={followingx} tarUsername={deleteFollowing} userTasksToggle={followingTasksToggle} ></Following>
               </div>
             </>
           )} />
