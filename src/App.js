@@ -17,7 +17,7 @@ const App = () => {
   const [followingx, setFollowingx] = useState()
   const [username, setUsername] = useState()
   const [loginPage, setLoginPage] = useState(true)
-  const fetchURL = 'http://localhost:8080'
+  const fetchURL = 'https://taskinit-backendmangodb.herokuapp.com'
 
   useEffect(() => {
     login()
