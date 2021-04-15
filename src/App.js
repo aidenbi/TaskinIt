@@ -12,10 +12,9 @@ import update from 'react-addons-update';
 
 
 const App = () => {
-  const [auth, setAuth] = useState(false)
   const [tasksList, setTasksList] = useState({})
   const [followingx, setFollowingx] = useState()
-  const [username, setUsername] = useState()
+  const [username, setUsername] = useState(null)
   const [loginPage, setLoginPage] = useState(true)
   const fetchURL = 'https://taskinit-backendmangodb.herokuapp.com'
 
@@ -26,19 +25,18 @@ const App = () => {
   useEffect(() => {
     getFollowing()
     getTasks()
-  }, [auth])
+  }, [username])
 
   const getTasks = async () => {
     const tasksFromServer = await fetchTasks()
-    var data = tasksList
     if (username) {
-      data[username] = tasksFromServer
+      var data = { ...tasksList, [username]: tasksFromServer }
     }
     setTasksList(data)
   }
 
-  console.log(username)
-  console.log(tasksList)
+  console.log(1, username)
+  console.log(2, tasksList)
   const getFollowing = async () => {
     const followingsFromServer = await fetchFollowings()
     setFollowingx(followingsFromServer)
@@ -46,13 +44,12 @@ const App = () => {
 
   const getfollowingTasks = async (user) => {
     const followingTasks = await fetchTarTasks(user)
-    var data = tasksList
-    data[user] = followingTasks
+    var data = { ...tasksList, [user]: followingTasks }
     setTasksList(data)
   }
 
   const removefollowingTasks = async (user) => {
-    var data = tasksList
+    var data = { ...tasksList }
     delete data[user];
     setTasksList(data)
   }
@@ -154,10 +151,14 @@ const App = () => {
 
   // Delete Task
   const deleteTask = async (id) => {
-    await fetch(`${fetchURL}/tasks/${id}`, {
+    const res = await fetch(`${fetchURL}/tasks/${id}`, {
       method: 'DELETE'
     })
 
+    const body = await res.json()
+    if (!res.ok) {
+      alert(body.msg)
+    }
     getTasks()
 
   }
@@ -177,7 +178,10 @@ const App = () => {
       },
       body: JSON.stringify(updTask)
     })
-
+    const body = await res.json()
+    if (!res.ok) {
+      alert(body.msg)
+    }
     getTasks()
   }
 
@@ -196,7 +200,10 @@ const App = () => {
       },
       body: JSON.stringify(updTaskc)
     })
-
+    const body = await res.json()
+    if (!res.ok) {
+      alert(body.msg)
+    }
     getTasks()
   }
 
@@ -216,7 +223,10 @@ const App = () => {
       },
       body: JSON.stringify(updTaskc)
     })
-
+    const body = await res.json()
+    if (!res.ok) {
+      alert(body.msg)
+    }
     getTasks()
   }
 
@@ -237,8 +247,10 @@ const App = () => {
       body: JSON.stringify(updTaskComp)
     })
 
-    const data = await res.json()
-
+    const body = await res.json()
+    if (!res.ok) {
+      alert(body.msg)
+    }
     getTasks()
 
   }
@@ -255,7 +267,6 @@ const App = () => {
     const body = await res.json()
     if (res.ok) {
       setUsername(body)
-      setAuth(true)
 
     } else {
       alert(body.msg)
@@ -282,7 +293,7 @@ const App = () => {
     })
     const data = await res.json()
     alert(data.msg)
-    setAuth(false)
+    setUsername(null)
     setTasksList({})
   }
 
@@ -290,10 +301,10 @@ const App = () => {
   return (
 
     <Router>
-      {auth && Object.keys(tasksList) !== 0 ? (
+      {username !== null && tasksList !== undefined ? (
         <div className="grid-container">
           <div className="title">
-            <Header onClick={logout} auth={auth} />
+            <Header onClick={logout} auth={username} />
           </div>
           <Redirect to="/" />
           <Route path='/' exact render={(props) => (

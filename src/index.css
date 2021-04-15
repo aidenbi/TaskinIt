@@ -46,8 +46,7 @@
   grid-auto-flow: column;
   gap: 0px 50px;
   padding:0 50px;
-  overflow: scroll;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .bodyplaninner {
