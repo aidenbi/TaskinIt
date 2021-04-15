@@ -35,8 +35,7 @@ const App = () => {
     setTasksList(data)
   }
 
-  console.log(1, username)
-  console.log(2, tasksList)
+
   const getFollowing = async () => {
     const followingsFromServer = await fetchFollowings()
     setFollowingx(followingsFromServer)
@@ -152,12 +151,13 @@ const App = () => {
   // Delete Task
   const deleteTask = async (id) => {
     const res = await fetch(`${fetchURL}/tasks/${id}`, {
+      credentials: 'include',
       method: 'DELETE'
     })
 
     const body = await res.json()
     if (!res.ok) {
-      alert(body.msg)
+      alert(body)
     }
     getTasks()
 
@@ -172,6 +172,7 @@ const App = () => {
     }
 
     const res = await fetch(`${fetchURL}/tasks/${id}`, {
+      credentials: 'include',
       method: 'PATCH',
       headers: {
         'Content-type': 'application/json'
@@ -180,7 +181,7 @@ const App = () => {
     })
     const body = await res.json()
     if (!res.ok) {
-      alert(body.msg)
+      alert(body)
     }
     getTasks()
   }
@@ -194,6 +195,7 @@ const App = () => {
     }
 
     const res = await fetch(`${fetchURL}/tasks/${id}`, {
+      credentials: 'include',
       method: 'PATCH',
       headers: {
         'Content-type': 'application/json'
@@ -202,7 +204,7 @@ const App = () => {
     })
     const body = await res.json()
     if (!res.ok) {
-      alert(body.msg)
+      alert(body)
     }
     getTasks()
   }
@@ -217,6 +219,7 @@ const App = () => {
     }
 
     const res = await fetch(`${fetchURL}/tasks/${id}`, {
+      credentials: 'include',
       method: 'PATCH',
       headers: {
         'Content-type': 'application/json'
@@ -225,7 +228,7 @@ const App = () => {
     })
     const body = await res.json()
     if (!res.ok) {
-      alert(body.msg)
+      alert(body)
     }
     getTasks()
   }
@@ -240,6 +243,7 @@ const App = () => {
     }
 
     const res = await fetch(`${fetchURL}/tasks/${id}`, {
+      credentials: 'include',
       method: 'PATCH',
       headers: {
         'Content-type': 'application/json'
@@ -249,7 +253,7 @@ const App = () => {
 
     const body = await res.json()
     if (!res.ok) {
-      alert(body.msg)
+      alert(body)
     }
     getTasks()
 
