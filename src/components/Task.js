@@ -7,7 +7,9 @@ import React from 'react';
 
 
 
-const Task = ({ task, onDelete, onToggle, onUp, onDown, onComplete }) => {
+const Task = ({ task, onDelete, onToggle, onUp, onDown, onComplete, ownTasks }) => {
+
+
 
     return (
         <div className={`grid-container1 ${task.reminder ?
@@ -17,11 +19,15 @@ const Task = ({ task, onDelete, onToggle, onUp, onDown, onComplete }) => {
             <div className="taskName">
                 {task.text}
             </div>
-            <div className="x"><FaTimes style={{ color: 'red', cursor: 'pointer' }} onClick={() => onDelete(task._id)} /></div>
-            <div className={`up ${task.Difficulty === 9 ? 'max' : ''}`}><FiPlus onClick={() => onUp(task._id)} /></div>
-            <div className={`down ${task.Difficulty === 1 ? 'max' : ''}`}><GoDash onClick={() => onDown(task._id)} /></div>
             <div className="taskDay">{task.day}</div>
-            <div className="compButton"><button className="btn btn-block" onClick={() => onComplete(task._id)}>COMPLETE</button></div>
+            {ownTasks &&
+                <>
+                    <div className="x"><FaTimes style={{ color: 'red', cursor: 'pointer' }} onClick={() => onDelete(task._id)} /></div>
+                    <div className={`up ${task.Difficulty === 9 ? 'max' : ''}`}><FiPlus onClick={() => onUp(task._id)} /></div>
+                    <div className={`down ${task.Difficulty === 1 ? 'max' : ''}`}><GoDash onClick={() => onDown(task._id)} /></div>
+                    <div className="compButton"><button className="btn btn-block" onClick={() => onComplete(task._id)}>COMPLETE</button></div>
+                </>
+            }
         </div>
 
     )

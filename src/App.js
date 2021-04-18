@@ -16,7 +16,8 @@ const App = () => {
   const [followingx, setFollowingx] = useState()
   const [username, setUsername] = useState(null)
   const [loginPage, setLoginPage] = useState(true)
-  const fetchURL = 'https://taskinit-backendmangodb.herokuapp.com'
+  const fetchURL = 'http://localhost:8080'
+  // https://taskinit-backendmangodb.herokuapp.com
 
   useEffect(() => {
     login()
@@ -127,9 +128,12 @@ const App = () => {
       body: JSON.stringify(user)
     })
     const body = await res.json()
-    await getFollowing()
-    await getfollowingTasks(user.following)
-    if (body.msg) {
+    console.log(body)
+    console.log(res)
+    if (res.ok) {
+      await getFollowing()
+      await getfollowingTasks(user.following)
+    } else {
       alert(body.msg)
     }
 
@@ -314,7 +318,7 @@ const App = () => {
           <Route path='/' exact render={(props) => (
             <>
               <div className="body">
-                <TasksList tasksList={tasksList} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} onAdd={addTask}></TasksList>
+                <TasksList username={username} tasksList={tasksList} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} onAdd={addTask}></TasksList>
               </div>
               <div className="sidebar">
                 <AddFollowing onFollow={addFollowing} ></AddFollowing>
