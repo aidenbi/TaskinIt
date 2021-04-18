@@ -16,8 +16,9 @@ const App = () => {
   const [followingx, setFollowingx] = useState()
   const [username, setUsername] = useState(null)
   const [loginPage, setLoginPage] = useState(true)
-  const fetchURL = 'http://localhost:8080'
-  // https://taskinit-backendmangodb.herokuapp.com
+  const fetchURL = 'https://taskinit-backendmangodb.herokuapp.com'
+  // 
+  //http://localhost:8080
 
   useEffect(() => {
     login()
@@ -30,6 +31,9 @@ const App = () => {
 
   const getTasks = async () => {
     const tasksFromServer = await fetchTasks()
+    tasksFromServer.forEach((task) => {
+      task.ownTask = true
+    })
     if (username) {
       var data = { ...tasksList, [username]: tasksFromServer }
     }

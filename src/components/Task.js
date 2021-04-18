@@ -7,9 +7,7 @@ import React from 'react';
 
 
 
-const Task = ({ task, onDelete, onToggle, onUp, onDown, onComplete, ownTasks }) => {
-
-
+const Task = ({ task, onDelete, onToggle, onUp, onDown, onComplete }) => {
 
     return (
         <div className={`grid-container1 ${task.reminder ?
@@ -20,7 +18,7 @@ const Task = ({ task, onDelete, onToggle, onUp, onDown, onComplete, ownTasks }) 
                 {task.text}
             </div>
             <div className="taskDay">{task.day}</div>
-            {ownTasks &&
+            {task.hasOwnProperty('ownTask') &&
                 <>
                     <div className="x"><FaTimes style={{ color: 'red', cursor: 'pointer' }} onClick={() => onDelete(task._id)} /></div>
                     <div className={`up ${task.Difficulty === 9 ? 'max' : ''}`}><FiPlus onClick={() => onUp(task._id)} /></div>
