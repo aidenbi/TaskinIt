@@ -14,9 +14,9 @@ const Header = ({ title, onClick, auth }) => {
 
             </div>
             {auth &&
-                <div>
+                <div className="logoffButton">
                     <IoLogOutOutline />
-                    <a className="logoffButton" onClick={onClick} >signout</a>
+                    <a onClick={onClick} >signout</a>
                 </div>
 
             }
