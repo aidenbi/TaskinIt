@@ -11,14 +11,14 @@ import Register from './components/Register'
 import update from 'react-addons-update';
 
 
+
 const App = () => {
-  const [tasksList, setTasksList] = useState({})
-  const [followingx, setFollowingx] = useState()
-  const [username, setUsername] = useState(null)
-  const [loginPage, setLoginPage] = useState(true)
-  const fetchURL = 'https://taskinit-backendmangodb.herokuapp.com'
-  // 
-  //http://localhost:8080
+  const [tasksList, setTasksList] = useState({});
+  const [followingx, setFollowingx] = useState();
+  const [username, setUsername] = useState(null);
+  const [loginPage, setLoginPage] = useState(true);
+  const fetchURL = process.env.REACT_APP_FETCH_URL;
+
 
   useEffect(() => {
     login()
@@ -31,9 +31,11 @@ const App = () => {
 
   const getTasks = async () => {
     const tasksFromServer = await fetchTasks()
-    tasksFromServer.forEach((task) => {
-      task.ownTask = true
-    })
+    if (username) {
+      tasksFromServer.forEach((task) => {
+        task.ownTask = true
+      })
+    }
     if (username) {
       var data = { ...tasksList, [username]: tasksFromServer }
     }
@@ -107,6 +109,7 @@ const App = () => {
   const addTask = async (task) => {
     task.Difficulty = 1;
     task.Completion = false;
+    task.Private = false;
     const res = await fetch(`${fetchURL}/tasks`, {
       credentials: 'include',
       method: 'POST',
@@ -169,6 +172,29 @@ const App = () => {
     }
     getTasks()
 
+  }
+
+  // Toggle Private Task
+  const togglePrivateTask = async (task) => {
+    const taskToToggle = await fetchTask(task.id)
+    const updTask = {
+      ...taskToToggle,
+      Private: task.ptask
+    }
+
+    const res = await fetch(`${fetchURL}/tasks/${task.id}`, {
+      credentials: 'include',
+      method: 'PATCH',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(updTask)
+    })
+    const body = await res.json()
+    if (!res.ok) {
+      alert(body)
+    }
+    getTasks()
   }
 
   // Toggle reminder
@@ -322,7 +348,7 @@ const App = () => {
           <Route path='/' exact render={(props) => (
             <>
               <div className="body">
-                <TasksList username={username} tasksList={tasksList} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} onAdd={addTask}></TasksList>
+                <TasksList username={username} tasksList={tasksList} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} onAdd={addTask} onPrivate={togglePrivateTask} ></TasksList>
               </div>
               <div className="sidebar">
                 <AddFollowing onFollow={addFollowing} ></AddFollowing>

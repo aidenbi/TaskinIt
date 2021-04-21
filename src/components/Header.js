@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import { IoLogOutOutline } from "react-icons/io5";
 
 
 
@@ -12,7 +13,13 @@ const Header = ({ title, onClick, auth }) => {
                 </header>
 
             </div>
-            {auth && <button onClick={onClick} >signout</button>}
+            {auth &&
+                <div>
+                    <IoLogOutOutline />
+                    <a className="logoffButton" onClick={onClick} >signout</a>
+                </div>
+
+            }
         </>
     )
 }

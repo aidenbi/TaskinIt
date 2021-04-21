@@ -6,6 +6,14 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
 
+@keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+@-webkit-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
 
  body {
   font-family: 'Poppins', sans-serif;
@@ -96,9 +104,87 @@
   gap: 0px 0px;
   grid-template-areas:
   "taskName . x"
-  "taskDay . ."
+  "taskDay privateTask privateTask"
   "taskDifficulty down up"
   ". compButton compButton";
+}
+
+.privateTask {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr 1fr;
+  grid-template-rows: 1.6fr 0.4fr;
+  gap: 0px 0px;
+  grid-template-areas:
+  ". plock plock"
+  ". switch switch";
+  grid-area: privateTask;
+}
+.plock {
+  grid-area: plock;
+  text-align: center;
+  align-self:flex-end;
+  animation: fadeIn 3s;
+  color: rgba(255, 0, 0, 0.699);
+
+}
+.switch { 
+  grid-area: switch;
+  left: 10%;
+  width: 60px;
+  height: 34px;
+  position: relative;
+  display: inline-block;
+ }
+ .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+ .switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .reminder {
@@ -121,9 +207,28 @@
 
 .x { 
   grid-area: x;
-  margin-top: auto;
-  margin-left: auto;
+  text-align: center;
+  margin-top: 30%;
 }
+
+.xstyle {
+  color: #2196f3;
+  font-stretch: ultra-expanded;
+  height: 25px;
+  width: 25px;
+  margin-left: 25%;
+}
+.xstyle:hover{
+  background-color: rgba(128, 128, 128, 0.253);
+  border-radius: 50px;
+  
+}
+
+.xstyle:active{
+    transform: scale(0.9);
+}
+
+
 
 .compButton { 
   align-items: center;
@@ -243,3 +348,23 @@
 .addbtn {
   text-align: right;
 }
+
+.logoffButton {
+  color:#2196f3;
+  cursor: pointer;
+  width: 10%;
+  margin-left: auto;
+}
+
+.logoffButton:active {
+  transform: scale(0.9);
+}
+
+.logoffButton:hover{
+  background-color: rgba(128, 128, 128, 0.253);
+  border-radius: 20px;
+  
+}
+
+
+
