@@ -4,12 +4,21 @@ import { useState } from 'react'
 
 const Tasks = ({ onPrivate, tasks, onDelete, onToggle, onUp, onDown, onComplete, onAdd }) => {
 
+    const [showadd, setShowAdd] = useState(true)
     console.log(tasks)
+
+    const showaddbt = async () => {
+        setShowAdd(false)
+    }
+
     return (
         <div className="bodyplaninner">
-            {tasks.length > 0 &&
+            {tasks.length !== 0 && tasks[0].hasOwnProperty('ownTask') && <div className="addbtn">
+                <AddTask onAdd={onAdd} />
+            </div>}
+            {tasks.length < 1 &&
                 <div className="addbtn">
-                    <AddTask onAdd={onAdd} tasks={tasks} />
+                    <AddTask onAdd={onAdd} />
                 </div>}
             {tasks.length > 0 ?
                 <>
