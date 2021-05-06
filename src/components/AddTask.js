@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Button from './Button'
 import { useLocation } from 'react-router-dom'
 
-const AddTask = ({ onAdd }) => {
+const AddTask = ({ onAdd, tasks }) => {
     const [showAddTask, setShowAddTask] = useState(false)
     const location = useLocation()
     const [text, setText] = useState('')
@@ -31,9 +31,9 @@ const AddTask = ({ onAdd }) => {
 
     return (
         <>
-            <div>
+            {tasks[0].hasOwnProperty('ownTask') && <div>
                 {location.pathname === '/' && <Button color={showAddTask ? 'red' : 'green'} text={showAddTask ? 'Close' : 'Add'} onClick={() => { setShowAddTask(!showAddTask) }} />}
-            </div>
+            </div>}
             {showAddTask &&
                 <form className='add-form' onSubmit={onSubmit} >
                     <div className='form-control'>

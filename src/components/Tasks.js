@@ -7,9 +7,10 @@ const Tasks = ({ onPrivate, tasks, onDelete, onToggle, onUp, onDown, onComplete,
     console.log(tasks)
     return (
         <div className="bodyplaninner">
-            {tasks.length !== 0 && tasks[0].hasOwnProperty('ownTask') && <div className="addbtn">
-                <AddTask onAdd={onAdd} />
-            </div>}
+            {tasks.length > 0 &&
+                <div className="addbtn">
+                    <AddTask onAdd={onAdd} tasks={tasks} />
+                </div>}
             {tasks.length > 0 ?
                 <>
                     {tasks.filter((task) => task.Completion === false).map((task, index) => (
