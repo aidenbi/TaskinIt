@@ -57,6 +57,14 @@ const App = () => {
 
   const getfollowingTasks = async (user) => {
     const followingTasks = await fetchTarTasks(user)
+    followingTasks.forEach(function (task) {
+      if (task.encrypt === true) {
+        const index = followingTasks.indexOf(task)
+        if (index > -1) {
+          followingTasks.splice(index, 1)
+        }
+      }
+    })
     var data = { ...tasksList, [user]: followingTasks }
     setTasksList(data)
   }

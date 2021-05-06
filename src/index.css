@@ -55,10 +55,14 @@
   gap: 0px 50px;
   padding:0 50px;
   overflow: hidden;
+  justify-content: center;
+  align-content: center;
 }
 
 .bodyplaninner {
   width: fit-content;
+  margin: auto auto;
+  align-items: center;
 }
 
 
@@ -121,7 +125,7 @@
   cursor: pointer;
   display: grid;
   grid-template-columns: 4.2fr 0.6fr 0.6fr;
-  grid-template-rows: 1fr 2.2fr 0.4fr 0.4fr;
+  grid-template-rows: 1fr 1fr 0.4fr 0.4fr;
   gap: 0px 0px;
   grid-template-areas:
   "taskName . x"
@@ -323,6 +327,7 @@ input:checked + .slider:before {
   min-height: 300px;
   padding: 30px;
   border-radius: 5px;
+  border: 1px solid gray;
 }
 
 

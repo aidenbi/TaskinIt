@@ -4,12 +4,12 @@ import { useState } from 'react'
 
 const Tasks = ({ onPrivate, tasks, onDelete, onToggle, onUp, onDown, onComplete, onAdd }) => {
 
-
+    console.log(tasks)
     return (
         <div className="bodyplaninner">
-            <div className="addbtn">
+            {tasks.length !== 0 && tasks[0].hasOwnProperty('ownTask') && <div className="addbtn">
                 <AddTask onAdd={onAdd} />
-            </div>
+            </div>}
             {tasks.length > 0 ?
                 <>
                     {tasks.filter((task) => task.Completion === false).map((task, index) => (
