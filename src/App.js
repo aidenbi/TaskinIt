@@ -174,6 +174,7 @@ const App = () => {
       method: 'DELETE'
     })
     getFollowing()
+    removefollowingTasks(tarUsername)
   }
 
 
