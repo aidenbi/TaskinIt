@@ -34,7 +34,6 @@ const App = () => {
     const tasksFromServer = await fetchTasks()
     if (username && encryptkey) {
       tasksFromServer.forEach(function (task) {
-        console.log(task)
         if (task.encrypt === true) {
           const aesCtr = new aesjs.ModeOfOperation.ctr(encryptkey, new aesjs.Counter(5))
           task.text = aesjs.utils.utf8.fromBytes(aesCtr.decrypt(aesjs.utils.hex.toBytes(task.text)))
@@ -148,8 +147,6 @@ const App = () => {
       body: JSON.stringify(user)
     })
     const body = await res.json()
-    console.log(body)
-    console.log(res)
     if (res.ok) {
       await getFollowing()
       await getfollowingTasks(user.following)
@@ -321,7 +318,6 @@ const App = () => {
     })
     const body = await res.json()
     if (res.ok) {
-      console.log(body)
       var epass = body.password.slice(body.password.length - 32)
       epass = aesjs.utils.utf8.toBytes(epass)
       setUsername(body.name)
