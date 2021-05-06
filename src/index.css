@@ -109,6 +109,27 @@
   ". compButton compButton";
 }
 
+.grid-container2 {
+  width: 500px;
+  margin: auto;
+  margin-top: 20px;
+  background: #b1b1b1;
+  border: 1px solid rgb(175, 172, 172);
+  box-shadow: 1px 3px rgb(56, 54, 54);
+  border-radius: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 4.2fr 0.6fr 0.6fr;
+  grid-template-rows: 1fr 2.2fr 0.4fr 0.4fr;
+  gap: 0px 0px;
+  grid-template-areas:
+  "taskName . x"
+  "taskDay privateTask privateTask"
+  "taskDifficulty down up"
+  ". compButton compButton";
+}
+
 .privateTask {
   display: grid;
   grid-template-columns: 0.9fr 1.1fr 1fr;

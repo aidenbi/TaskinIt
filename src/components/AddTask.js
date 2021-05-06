@@ -8,6 +8,7 @@ const AddTask = ({ onAdd }) => {
     const [text, setText] = useState('')
     const [day, setDay] = useState('')
     const [reminder, setReminder] = useState(false)
+    const [encrypt, setEncrypt] = useState(false)
 
     const onSubmit = (e) => {
         e.preventDefault()
@@ -17,11 +18,12 @@ const AddTask = ({ onAdd }) => {
             return
         }
 
-        onAdd({ text, day, reminder })
+        onAdd({ text, day, reminder, encrypt })
 
         setText('')
         setDay('')
         setReminder(false)
+        setEncrypt(false)
     }
 
 
@@ -45,6 +47,10 @@ const AddTask = ({ onAdd }) => {
                     <div className='form-control form-control-check'>
                         <label>Set Reminder</label>
                         <input type='checkbox' checked={reminder} value={reminder} onChange={(e) => setReminder(e.currentTarget.checked)} />
+                    </div>
+                    <div className='form-control form-control-check'>
+                        <label>Set Encryption</label>
+                        <input type='checkbox' checked={encrypt} value={encrypt} onChange={(e) => setEncrypt(e.currentTarget.checked)} />
                     </div>
 
                     <input type='submit' value='Save Task' className='btn btn-block' />

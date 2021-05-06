@@ -48,7 +48,7 @@ const Register = ({ onRegister, webtitle, onSubmitz, onClick }) => {
                     <label>Confirm Password</label>
                     <input type='text' placeholder='Confirm Password' type="password" value={password2} onChange={(e) => setPassword2(e.target.value)} />
                 </div>
-                <input type='submit' value="Login" className="btn btn-block" />
+                <input type='submit' value="Register" className="btn btn-block" />
             </form>
             <Link to='/'>
                 <button onClick={onClick} >Login Now!</button>

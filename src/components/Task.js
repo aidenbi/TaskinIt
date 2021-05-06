@@ -22,7 +22,7 @@ const Task = ({ task, onDelete, onToggle, onUp, onDown, onComplete, onPrivate })
     }
 
     return (
-        <div className={`grid-container1 ${task.reminder ?
+        <div className={`grid-container${task.encrypt ? '2' : '1'} ${task.reminder ?
             'reminder' : ''}`}
             onDoubleClick={() => onToggle(task._id)}>
             <div className="taskDifficulty">{task.Difficulty}</div>

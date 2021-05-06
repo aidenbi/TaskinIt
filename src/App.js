@@ -9,8 +9,8 @@ import AddFollowing from './components/AddFollowing'
 import TasksList from './components/TasksList'
 import Register from './components/Register'
 import update from 'react-addons-update';
-
-
+import bcrypt from 'bcryptjs'
+import aesjs from 'aes-js'
 
 const App = () => {
   const [tasksList, setTasksList] = useState({});
@@ -18,6 +18,7 @@ const App = () => {
   const [username, setUsername] = useState(null);
   const [loginPage, setLoginPage] = useState(true);
   const fetchURL = process.env.REACT_APP_FETCH_URL;
+  const [encryptkey, setEncryptKey] = useState(null)
 
 
   useEffect(() => {
@@ -27,19 +28,26 @@ const App = () => {
   useEffect(() => {
     getFollowing()
     getTasks()
-  }, [username])
+  }, [username, encryptkey])
 
   const getTasks = async () => {
     const tasksFromServer = await fetchTasks()
-    if (username) {
+    if (username && encryptkey) {
+      tasksFromServer.forEach(function (task) {
+        console.log(task)
+        if (task.encrypt === true) {
+          const aesCtr = new aesjs.ModeOfOperation.ctr(encryptkey, new aesjs.Counter(5))
+          task.text = aesjs.utils.utf8.fromBytes(aesCtr.decrypt(aesjs.utils.hex.toBytes(task.text)))
+        }
+      })
       tasksFromServer.forEach((task) => {
         task.ownTask = true
       })
-    }
-    if (username) {
+
       var data = { ...tasksList, [username]: tasksFromServer }
+      setTasksList(data)
     }
-    setTasksList(data)
+
   }
 
 
@@ -110,6 +118,11 @@ const App = () => {
     task.Difficulty = 1;
     task.Completion = false;
     task.Private = false;
+    if (task.encrypt === true) {
+      const aesCtr = new aesjs.ModeOfOperation.ctr(encryptkey, new aesjs.Counter(5))
+      task.text = aesCtr.encrypt(aesjs.utils.utf8.toBytes(task.text))
+      task.text = aesjs.utils.hex.fromBytes(task.text);
+    }
     const res = await fetch(`${fetchURL}/tasks`, {
       credentials: 'include',
       method: 'POST',
@@ -294,6 +307,10 @@ const App = () => {
   }
 
   const login = async (user) => {
+    const salt = `$2a$10$${process.env.REACT_APP_SALT_ONE}`
+    if (user !== undefined) {
+      user.newpassword = await bcrypt.hash(user.password, salt);
+    }
     const res = await fetch(`${fetchURL}/api/user/login`, {
       credentials: 'include',
       method: 'POST',
@@ -304,14 +321,19 @@ const App = () => {
     })
     const body = await res.json()
     if (res.ok) {
-      setUsername(body)
-
+      console.log(body)
+      var epass = body.password.slice(body.password.length - 32)
+      epass = aesjs.utils.utf8.toBytes(epass)
+      setUsername(body.name)
+      setEncryptKey(epass)
     } else {
       alert(body.msg)
     }
   }
 
   const register = async (regUser) => {
+    const salt = `$2a$10$${process.env.REACT_APP_SALT_ONE}`
+    regUser.password = await bcrypt.hash(regUser.password, salt);
     const res = await fetch(`${fetchURL}/api/user/register`, {
       method: 'POST',
       headers: {
@@ -322,7 +344,6 @@ const App = () => {
     })
     const body = await res.json()
     alert(body.msg)
-
   }
 
   const logout = async () => {
