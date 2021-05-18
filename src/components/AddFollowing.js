@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 
-const Following = ({ onFollow }) => {
+const Following = ({ onFollow, username }) => {
     const [following, setFollowing] = useState('')
 
     const onSubmit = (e) => {
@@ -10,6 +10,11 @@ const Following = ({ onFollow }) => {
 
         if (!following) {
             alert('Please enter a valid username!')
+            return
+        }
+
+        if (following === username) {
+            alert('You cannot follow yourself!')
             return
         }
 

@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
-import About from './components/About'
 import Login from './components/Login'
 import Following from './components/Following'
 import AddFollowing from './components/AddFollowing'
@@ -146,6 +145,10 @@ const App = () => {
   }
   //Add Following
   const addFollowing = async (user) => {
+    if (user === username) {
+      alert("You cannot follow yourself")
+      return
+    }
     const res = await fetch(`${fetchURL}/following`, {
       credentials: 'include',
       method: 'POST',
@@ -374,15 +377,14 @@ const App = () => {
           <Route path='/' exact render={(props) => (
             <>
               <div className="body">
-                <TasksList username={username} tasksList={tasksList} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} onAdd={addTask} onPrivate={togglePrivateTask} ></TasksList>
+                <TasksList tasksList={tasksList} onDelete={deleteTask} onToggle={toggleReminder} onUp={taskDiffup} onDown={taskDiffdown} onComplete={taskCompletion} onAdd={addTask} onPrivate={togglePrivateTask} ></TasksList>
               </div>
               <div className="sidebar">
-                <AddFollowing onFollow={addFollowing} ></AddFollowing>
+                <AddFollowing username={username} onFollow={addFollowing} ></AddFollowing>
                 <Following following={followingx} tarUsername={deleteFollowing} userTasksToggle={followingTasksToggle} ></Following>
               </div>
             </>
           )} />
-          <Route path='/about' component={About} />
           <div className="footer">
             <Footer />
           </div>

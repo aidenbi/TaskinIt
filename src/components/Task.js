@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react'
 
 
 
-const Task = ({ task, onDelete, onToggle, onUp, onDown, onComplete, onPrivate }) => {
+const Task = ({ task, onDelete, onToggle, onUp, onDown, onComplete, onPrivate, addButtonToggle }) => {
     const [ptask, setPTask] = useState(task.Private)
 
     useEffect(() => {
@@ -19,6 +19,10 @@ const Task = ({ task, onDelete, onToggle, onUp, onDown, onComplete, onPrivate })
         if (task.hasOwnProperty('ownTask')) {
             onPrivate({ id, ptask })
         }
+    }
+
+    if (task.hasOwnProperty('ownTask') === false) {
+        addButtonToggle()
     }
 
     return (
