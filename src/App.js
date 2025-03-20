@@ -356,7 +356,8 @@ const App = () => {
 
   const logout = async () => {
     const res = await fetch(`${fetchURL}/api/user/logout`, {
-      credentials: 'include'
+      credentials: 'include',
+      method: 'POST',
     })
     const data = await res.json()
     alert(data.msg)
